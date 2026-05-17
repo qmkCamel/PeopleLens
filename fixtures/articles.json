@@ -1,0 +1,18 @@
+[
+  {
+    "id": "wechat_2026_05_17",
+    "url": "https://mp.weixin.qq.com/s/8424oAybD_B4-3mZH_Dstg",
+    "sourceType": "wechat",
+    "language": "zh",
+    "category": "chinese_article",
+    "title": "Altman 投的 Agent 终端 Warp 开源了，15小时Star 数飙到3.5万！开源是延长软件寿命的最佳方式",
+    "notes": "用户提供的微信文章。命令行/自动抓取环境可能触发微信验证页，正文需要在浏览器中手动复制后评估。",
+    "textStatus": "ready",
+    "textPath": "fixtures/sources/wechat_2026_05_17.md",
+    "expected": {
+      "topPeople": ["Sam Altman", "Zach Lloyd"],
+      "excludedFalsePositives": ["方式", "范式", "任务", "程师", "于创", "于创始", "Hacker News"],
+      "keyRelationships": []
+    }
+  }
+]

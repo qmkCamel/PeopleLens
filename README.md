@@ -36,3 +36,5 @@ https://mp.weixin.qq.com/s/yPhd9bjl5UHFf58sgZLlaA
 
 - [产品 MVP 设计](docs/product-mvp-design.md)
 - [技术架构与工程设计](docs/technical-architecture.md)
+- [测试文章集](fixtures/README.md)
+- [OpenSpec 项目上下文](openspec/project.md)

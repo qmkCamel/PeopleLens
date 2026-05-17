@@ -65,6 +65,7 @@ const stopNames = new Set([
   "OpenAI",
   "API Key",
   "ChatGPT",
+  "Hacker News",
   "今天",
   "文章",
   "公司",
@@ -84,6 +85,19 @@ const stopNames = new Set([
   "市场",
   "产品",
   "用户",
+  "方式",
+  "范式",
+  "向市",
+  "向市场",
+  "任何",
+  "任务",
+  "程师",
+  "周期",
+  "高度",
+  "万名",
+  "许可",
+  "金雄",
+  "金雄厚",
 ]);
 
 const organizationHints = [
@@ -149,6 +163,10 @@ export function extractCandidateGroups(sentences: Sentence[], title: string): Ca
       const hasContext = group.mentions.some(
         (mention) => mention.hasRoleNearby || mention.hasRelationshipNearby,
       );
+      const appearsInTitle = group.mentions.some((mention) => mention.sentence.id === "title");
+      if (isChineseCandidate(group.canonicalName) && !hasContext && !appearsInTitle) {
+        return false;
+      }
       return realMentions.length >= 2 || hasContext || group.mentions.some((mention) => mention.sentence.id === "title");
     })
     .sort((a, b) => b.mentions.length - a.mentions.length);
@@ -211,6 +229,9 @@ function shouldSkipName(name: string) {
   if (/^\d+$/.test(name)) {
     return true;
   }
+  if (roleWords.some((word) => name.includes(word))) {
+    return true;
+  }
   return organizationHints.some((hint) => name.includes(hint));
 }
 
@@ -222,6 +243,12 @@ function isLikelyChineseName(name: string) {
     return false;
   }
   if (/[称说指在和与的了是将对为把被从向就都及或但而其这那他她它]$/.test(name)) {
+    return false;
+  }
+  if (/[创始终未已正新旧原本该些者式务师度名可许]$/.test(name)) {
+    return false;
+  }
+  if (/[创始市场]/.test(name)) {
     return false;
   }
   if (/[，。！？；、“”：《》]/.test(name)) {
@@ -240,6 +267,10 @@ function dedupeMentions(mentions: CandidateMention[]) {
     seen.add(key);
     return true;
   });
+}
+
+function isChineseCandidate(name: string) {
+  return /^[\u4e00-\u9fa5]{2,4}$/.test(name);
 }
 
 export function getRoleHint(name: string, sentences: Sentence[]) {
