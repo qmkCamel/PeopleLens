@@ -11,12 +11,16 @@ import type {
 } from "./analysis/types";
 import {
   clearMemory,
+  exportMemoryJson,
+  getMemoryEntries,
   getMemoryMap,
+  type MemoryEntry,
   recordEncounter,
   toggleSavedPerson,
 } from "./memory/memoryService";
 import { ArticleInputForm } from "./ui/ArticleInput";
 import { CastSidebar, type PersonFilter } from "./ui/CastSidebar";
+import { MemoryLibrary } from "./ui/MemoryLibrary";
 import { RelationshipList } from "./ui/RelationshipList";
 
 const defaultInput: ArticleInput = {
@@ -46,21 +50,33 @@ function withMemory(result: AnalysisResult): AnalysisResult {
 }
 
 function downloadMarkdown(markdown: string, title: string) {
-  const blob = new Blob([markdown], { type: "text/markdown;charset=utf-8" });
+  downloadFile(markdown, `${safeFileStem(title)}-人物演员表.md`, "text/markdown;charset=utf-8");
+}
+
+function downloadJson(json: string, title: string) {
+  downloadFile(json, `${safeFileStem(title)}.json`, "application/json;charset=utf-8");
+}
+
+function downloadFile(content: string, filename: string, type: string) {
+  const blob = new Blob([content], { type });
   const href = URL.createObjectURL(blob);
   const link = document.createElement("a");
-  const safeTitle = title.trim().replace(/[^\p{L}\p{N}]+/gu, "-").replace(/^-|-$/g, "") || "peoplelens";
   link.href = href;
-  link.download = `${safeTitle}-人物演员表.md`;
+  link.download = filename;
   document.body.appendChild(link);
   link.click();
   link.remove();
   URL.revokeObjectURL(href);
 }
 
+function safeFileStem(title: string) {
+  return title.trim().replace(/[^\p{L}\p{N}]+/gu, "-").replace(/^-|-$/g, "") || "peoplelens";
+}
+
 function App() {
   const [article, setArticle] = useState<ArticleInput>(defaultInput);
   const [result, setResult] = useState<AnalysisResult | null>(null);
+  const [memoryEntries, setMemoryEntries] = useState<MemoryEntry[]>(() => getMemoryEntries());
   const [filter, setFilter] = useState<PersonFilter>("all");
   const [error, setError] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -105,6 +121,7 @@ function App() {
         recordEncounter(person, analyzed.article);
       });
       setResult(withMemory(analyzed));
+      setMemoryEntries(getMemoryEntries());
       setFilter("all");
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "分析失败，请稍后重试。");
@@ -118,6 +135,7 @@ function App() {
     if (result) {
       setResult(withMemory(result));
     }
+    setMemoryEntries(getMemoryEntries());
   }
 
   function handleClearMemory() {
@@ -125,6 +143,7 @@ function App() {
     if (result) {
       setResult(withMemory(result));
     }
+    setMemoryEntries([]);
   }
 
   function handleExport() {
@@ -132,6 +151,10 @@ function App() {
       return;
     }
     downloadMarkdown(exportAnalysisAsMarkdown(result), result.article.title);
+  }
+
+  function handleExportMemory() {
+    downloadJson(exportMemoryJson(), "peoplelens-local-memory");
   }
 
   return (
@@ -177,6 +200,7 @@ function App() {
       </section>
 
       <RelationshipList relationships={result?.relationships ?? []} />
+      <MemoryLibrary entries={memoryEntries} onClearMemory={handleClearMemory} onExportMemory={handleExportMemory} />
     </main>
   );
 }

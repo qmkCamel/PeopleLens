@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "PeopleLens",
+  "version": "0.1.0",
+  "description": "Generate an article-grounded people cast list from the current page or pasted text.",
+  "action": {
+    "default_title": "Open PeopleLens"
+  },
+  "background": {
+    "service_worker": "service-worker.js"
+  },
+  "permissions": ["activeTab", "scripting", "sidePanel", "storage"],
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  }
+}

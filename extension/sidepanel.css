@@ -1,0 +1,47 @@
+.extension-shell {
+  width: min(100% - 20px, 720px);
+  padding: 16px 0 24px;
+}
+
+.extension-hero {
+  display: block;
+  margin-bottom: 12px;
+  padding: 4px 0;
+}
+
+.extension-hero h1 {
+  font-size: 2rem;
+}
+
+.extension-hero .hero-copy {
+  font-size: 0.95rem;
+}
+
+.extension-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 0 18px;
+}
+
+.extension-actions .primary-button {
+  margin: 0;
+}
+
+.extension-results {
+  margin-top: 14px;
+}
+
+.extension-shell textarea {
+  min-height: 260px;
+}
+
+.extension-shell .relationship-panel {
+  margin-top: 14px;
+}
+
+@media (max-width: 520px) {
+  .extension-actions {
+    grid-template-columns: 1fr;
+  }
+}

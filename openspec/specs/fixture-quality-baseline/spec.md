@@ -3,9 +3,7 @@
 ## Purpose
 
 Maintain a small, reviewable article fixture set that protects extraction quality while PeopleLens evolves.
-
 ## Requirements
-
 ### Requirement: Fixture manifest
 
 The system SHALL maintain a structured fixture manifest for article quality baselines.
@@ -17,12 +15,17 @@ The system SHALL maintain a structured fixture manifest for article quality base
 
 ### Requirement: Expected people checks
 
-The fixture analysis script SHALL fail when required expected people are missing.
+The fixture analysis script SHALL fail when required expected people are missing and SHALL be part of the project validation command.
 
 #### Scenario: Missing expected person
 - **GIVEN** a ready fixture declares `expected.topPeople`
 - **WHEN** the analysis result does not include one of those names
 - **THEN** the script exits with failure
+
+#### Scenario: Run full validation
+- **GIVEN** the project validation command is run
+- **WHEN** fixture analysis fails
+- **THEN** the validation command exits with failure
 
 ### Requirement: False positive checks
 
@@ -41,3 +44,4 @@ The fixture workflow SHALL support manually collected WeChat article Markdown.
 - **GIVEN** a WeChat article requires browser-mediated access
 - **WHEN** the article is added to the fixture set
 - **THEN** the source Markdown is collected manually and stored under `fixtures/sources/`
+

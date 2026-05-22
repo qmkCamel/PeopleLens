@@ -4,6 +4,11 @@ const storageKey = "peoplelens.memory.v1";
 
 type MemoryMap = Record<string, PersonMemory>;
 
+export interface MemoryEntry extends PersonMemory {
+  latestSourceTitle: string;
+  latestSourceUrl: string;
+}
+
 export function getMemoryMap(): MemoryMap {
   const raw = localStorage.getItem(storageKey);
   if (!raw) {
@@ -14,6 +19,36 @@ export function getMemoryMap(): MemoryMap {
   } catch {
     return {};
   }
+}
+
+export function getMemoryEntries(): MemoryEntry[] {
+  return Object.values(getMemoryMap())
+    .map((entry) => {
+      const latestSource = entry.sources[0];
+      return {
+        ...entry,
+        latestSourceTitle: latestSource?.title ?? "",
+        latestSourceUrl: latestSource?.url ?? "",
+      };
+    })
+    .sort((left, right) => {
+      if (left.saved !== right.saved) {
+        return left.saved ? -1 : 1;
+      }
+      return new Date(right.lastSeenAt).getTime() - new Date(left.lastSeenAt).getTime();
+    });
+}
+
+export function exportMemoryJson() {
+  return JSON.stringify(
+    {
+      exportedAt: new Date().toISOString(),
+      version: 1,
+      people: getMemoryEntries(),
+    },
+    null,
+    2,
+  );
 }
 
 export function recordEncounter(person: PersonCard, article: ArticleMeta) {
@@ -77,4 +112,3 @@ function dedupeSources(sources: PersonMemory["sources"]) {
     return true;
   });
 }
-

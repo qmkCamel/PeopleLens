@@ -6,11 +6,14 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:extension": "node scripts/build-extension.mjs",
     "fixtures:analyze": "node scripts/analyze-fixtures.mjs",
     "openspec": "openspec",
     "openspec:list": "openspec list",
     "openspec:list:specs": "openspec list --specs",
     "openspec:validate": "openspec validate --all",
+    "typecheck:extension": "tsc --noEmit -p tsconfig.extension.json",
+    "validate": "npm run openspec:validate && npm run fixtures:analyze && npm run build && npm run typecheck:extension && npm run build:extension",
     "preview": "vite preview"
   },
   "dependencies": {

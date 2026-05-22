@@ -374,6 +374,71 @@ textarea:focus {
   margin-top: 20px;
 }
 
+.memory-panel {
+  margin-top: 20px;
+}
+
+.memory-tools {
+  padding: 14px 18px;
+  border-bottom: 1px solid #e5e9e1;
+}
+
+.memory-tools label {
+  display: grid;
+  gap: 7px;
+  color: #4d594f;
+  font-size: 0.9rem;
+  font-weight: 650;
+}
+
+.memory-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  padding: 16px 18px 18px;
+}
+
+.memory-section {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+
+.memory-section h3 {
+  margin: 0;
+}
+
+.memory-list {
+  display: grid;
+  gap: 10px;
+}
+
+.memory-item {
+  display: grid;
+  gap: 7px;
+  padding: 12px;
+  border: 1px solid #d8dfd4;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.memory-item div {
+  display: grid;
+  gap: 3px;
+}
+
+.memory-item span,
+.memory-empty {
+  color: #5a675d;
+  font-size: 0.88rem;
+}
+
+.memory-item p {
+  margin: 0;
+  color: #2e3b32;
+  line-height: 1.45;
+}
+
 .relationship-list {
   display: grid;
   gap: 12px;
@@ -438,7 +503,8 @@ blockquote {
   }
 
   .hero-band,
-  .workspace-grid {
+  .workspace-grid,
+  .memory-grid {
     grid-template-columns: 1fr;
   }
 

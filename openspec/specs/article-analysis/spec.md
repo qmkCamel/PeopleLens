@@ -3,9 +3,7 @@
 ## Purpose
 
 Turn pasted article text into an article-grounded cast list of people, evidence, uncertainty, and relationships.
-
 ## Requirements
-
 ### Requirement: User-triggered analysis
 
 The system SHALL analyze article text only after the user explicitly requests analysis.
@@ -31,7 +29,7 @@ The system SHALL provide a local analysis mode that does not upload article text
 
 ### Requirement: AI structured mode
 
-The system SHALL provide an explicit AI structured mode that requires user-provided provider settings.
+The system SHALL provide an explicit AI structured mode that requires user-provided provider settings and validates structured payloads before rendering.
 
 #### Scenario: Missing API key
 - **GIVEN** the user selects AI structured mode without an API key
@@ -42,6 +40,11 @@ The system SHALL provide an explicit AI structured mode that requires user-provi
 - **GIVEN** the user selects AI structured mode with provider settings
 - **WHEN** the user starts analysis
 - **THEN** the system sends the title, source, and sentence list to the configured provider
+
+#### Scenario: Reject invalid AI payload
+- **GIVEN** the configured provider returns JSON that does not match the PeopleLens cast shape
+- **WHEN** AI analysis maps the response
+- **THEN** the system rejects the payload with a user-facing validation error instead of rendering partial invalid data
 
 ### Requirement: Person cards
 
@@ -60,3 +63,4 @@ The system SHALL summarize possible person relationships conservatively using ar
 - **GIVEN** multiple extracted people appear in the same evidence sentence
 - **WHEN** relationship extraction runs
 - **THEN** the system may produce a relationship summary linked to that evidence sentence
+

@@ -1,17 +1,4 @@
-# local-memory Specification
-
-## Purpose
-
-Remember people the reader has encountered or saved in the current browser without requiring an account.
-## Requirements
-### Requirement: Encounter recording
-
-The system SHALL record local encounter history for analyzed people.
-
-#### Scenario: Record analyzed person
-- **GIVEN** an analysis result contains a person
-- **WHEN** analysis completes
-- **THEN** the system records the person's normalized name, canonical name, encounter count, timestamps, and source article metadata in browser storage
+## MODIFIED Requirements
 
 ### Requirement: Saved people
 
@@ -41,14 +28,7 @@ The system SHALL allow users to clear and export local PeopleLens memory.
 - **WHEN** the user exports memory
 - **THEN** the system downloads a JSON file containing the local PeopleLens memory map
 
-### Requirement: Privacy boundary
-
-The system SHALL keep local memory in the current browser for the MVP.
-
-#### Scenario: Use without account
-- **GIVEN** the user opens the Web MVP
-- **WHEN** the user analyzes and saves people
-- **THEN** the system does not require account registration or server-side profile storage
+## ADDED Requirements
 
 ### Requirement: Memory search
 
@@ -58,4 +38,3 @@ The system SHALL support local search across stored people and source article ti
 - **GIVEN** local memory contains people and source metadata
 - **WHEN** the user enters a memory search query
 - **THEN** the memory library shows matching people whose names or source titles include the query
-

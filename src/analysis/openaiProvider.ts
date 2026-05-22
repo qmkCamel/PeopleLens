@@ -104,7 +104,7 @@ export async function analyzeArticleWithOpenAI(
       ? await requestResponsesApi(input, settings, sentences)
       : await requestChatCompletions(input, settings, sentences);
 
-  const parsed = JSON.parse(outputText) as AiResponsePayload;
+  const parsed = parseAiPayload(outputText);
   return mapAiPayloadToResult(parsed, article, sentences);
 }
 
@@ -270,6 +270,82 @@ function mapAiPayloadToResult(
   };
 }
 
+function parseAiPayload(outputText: string): AiResponsePayload {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(outputText);
+  } catch {
+    throw new Error("AI 返回的内容不是合法 JSON，请重试或切换为本地规则模式。");
+  }
+  const error = validateAiPayload(parsed);
+  if (error) {
+    throw new Error(`AI 返回结构不符合 PeopleLens 要求：${error}`);
+  }
+  return parsed as AiResponsePayload;
+}
+
+function validateAiPayload(payload: unknown): string {
+  if (!isRecord(payload)) {
+    return "顶层结果必须是对象。";
+  }
+  if (!Array.isArray(payload.people)) {
+    return "people 必须是数组。";
+  }
+  if (!Array.isArray(payload.relationships)) {
+    return "relationships 必须是数组。";
+  }
+  if (!Array.isArray(payload.uncertaintyNotes)) {
+    return "uncertaintyNotes 必须是数组。";
+  }
+
+  for (const [index, person] of payload.people.entries()) {
+    if (!isRecord(person)) {
+      return `people[${index}] 必须是对象。`;
+    }
+    const fields: Array<[string, (value: unknown) => boolean]> = [
+      ["canonicalName", isNonEmptyString],
+      ["identity", isString],
+      ["articleRole", isString],
+      ["aliases", isStringArray],
+      ["timeline", isStringArray],
+      ["evidenceSentenceIds", isStringArray],
+      ["confidence", isConfidence],
+    ];
+    for (const [field, validator] of fields) {
+      if (!validator(person[field])) {
+        return `people[${index}].${field} 无效。`;
+      }
+    }
+    if ((person.evidenceSentenceIds as string[]).length === 0) {
+      return `people[${index}].evidenceSentenceIds 至少需要一个证据句 ID。`;
+    }
+  }
+
+  for (const [index, relationship] of payload.relationships.entries()) {
+    if (!isRecord(relationship)) {
+      return `relationships[${index}] 必须是对象。`;
+    }
+    const fields: Array<[string, (value: unknown) => boolean]> = [
+      ["people", isStringArray],
+      ["label", isString],
+      ["summary", isString],
+      ["evidenceSentenceIds", isStringArray],
+      ["confidence", isConfidence],
+    ];
+    for (const [field, validator] of fields) {
+      if (!validator(relationship[field])) {
+        return `relationships[${index}].${field} 无效。`;
+      }
+    }
+  }
+
+  if (!isStringArray(payload.uncertaintyNotes)) {
+    return "uncertaintyNotes 只能包含字符串。";
+  }
+
+  return "";
+}
+
 function countMentions(name: string, sentences: Sentence[]) {
   return sentences.reduce((count, sentence) => count + (sentence.text.includes(name) ? 1 : 0), 0);
 }
@@ -319,4 +395,20 @@ function getPath(value: unknown, path: Array<string | number>) {
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
+}
+
+function isString(value: unknown): value is string {
+  return typeof value === "string";
+}
+
+function isNonEmptyString(value: unknown): value is string {
+  return typeof value === "string" && value.trim().length > 0;
+}
+
+function isStringArray(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every((item) => typeof item === "string");
+}
+
+function isConfidence(value: unknown): value is Confidence {
+  return value === "high" || value === "medium" || value === "uncertain";
 }
