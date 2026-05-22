@@ -31,6 +31,7 @@ Run before release:
 
 ```bash
 npm run validate
+npm run release:package
 ```
 
 Expected checks:
@@ -39,6 +40,17 @@ Expected checks:
 - Fixture analysis passes.
 - Web build passes.
 - Extension build passes.
+- Extension zip package is created under `.release/`.
+
+## Static Release Pages
+
+Confirm deployed URLs work:
+
+- `/privacy.html`
+- `/terms.html`
+- `/robots.txt`
+- `/site.webmanifest`
+- `/favicon.svg`
 
 ## Manual Web Smoke Test
 
@@ -59,3 +71,10 @@ Expected checks:
 4. Open PeopleLens side panel.
 5. Click analyze current page.
 6. Confirm fallback paste works on pages where extraction is blocked or too short.
+
+## Chrome Web Store Preparation
+
+- Prepare screenshots listed in `docs/chrome-web-store-listing.md`.
+- Confirm extension icon renders at 16, 32, 48, and 128 pixels.
+- Use the deployed `/privacy.html` URL for privacy policy.
+- Confirm permission rationale matches `extension/manifest.json`.

@@ -1,0 +1,16 @@
+{
+  "name": "PeopleLens",
+  "short_name": "PeopleLens",
+  "description": "Generate an article-grounded people cast list, relationships, and local reading memory.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f6f2",
+  "theme_color": "#22472c",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "128x128",
+      "type": "image/svg+xml"
+    }
+  ]
+}

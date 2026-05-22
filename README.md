@@ -28,9 +28,10 @@ npm run build
 
 ```bash
 npm run validate
+npm run release:package
 ```
 
-该命令会依次运行 OpenSpec 校验、fixture 基线、本地 Web 构建和 Chrome Extension 构建。
+`validate` 会依次运行 OpenSpec 校验、fixture 基线、本地 Web 构建和 Chrome Extension 构建。`release:package` 会生成 Web 静态构建和 Chrome Extension zip。
 
 ### Chrome Extension MVP
 
@@ -63,5 +64,7 @@ https://mp.weixin.qq.com/s/yPhd9bjl5UHFf58sgZLlaA
 - [产品 MVP 设计](docs/product-mvp-design.md)
 - [技术架构与工程设计](docs/technical-architecture.md)
 - [上线检查清单](docs/launch-checklist.md)
+- [发布指南](docs/release.md)
+- [Chrome Web Store 文案草稿](docs/chrome-web-store-listing.md)
 - [测试文章集](fixtures/README.md)
 - [OpenSpec 项目上下文](openspec/project.md)

@@ -378,6 +378,26 @@ textarea:focus {
   margin-top: 20px;
 }
 
+.app-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+  padding: 24px 0 4px;
+  color: #5a675d;
+  font-size: 0.9rem;
+}
+
+.app-footer a {
+  color: #4d594f;
+  text-decoration: none;
+}
+
+.app-footer a:hover {
+  color: #22472c;
+  text-decoration: underline;
+}
+
 .memory-tools {
   padding: 14px 18px;
   border-bottom: 1px solid #e5e9e1;

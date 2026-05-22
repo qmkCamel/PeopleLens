@@ -201,6 +201,10 @@ function App() {
 
       <RelationshipList relationships={result?.relationships ?? []} />
       <MemoryLibrary entries={memoryEntries} onClearMemory={handleClearMemory} onExportMemory={handleExportMemory} />
+      <footer className="app-footer">
+        <a href="/privacy.html">隐私政策</a>
+        <a href="/terms.html">使用条款</a>
+      </footer>
     </main>
   );
 }

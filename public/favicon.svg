@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="PeopleLens">
+  <rect width="128" height="128" rx="28" fill="#22472c"/>
+  <circle cx="55" cy="54" r="28" fill="none" stroke="#f4f6f2" stroke-width="11"/>
+  <path d="M77 76 L101 100" stroke="#f4f6f2" stroke-width="12" stroke-linecap="round"/>
+  <circle cx="55" cy="54" r="10" fill="#dce8dd"/>
+</svg>
