@@ -1,10 +1,8 @@
 import { useMemo, useState } from "react";
-import { analyzeArticle } from "./analysis/analyzeArticle";
 import { exportAnalysisAsMarkdown } from "./analysis/exportMarkdown";
 import { analyzeArticleWithOpenAI } from "./analysis/openaiProvider";
 import type {
   AiSettings,
-  AnalysisMode,
   AnalysisResult,
   ArticleInput,
   PersonCard as PersonCardType,
@@ -80,7 +78,6 @@ function App() {
   const [filter, setFilter] = useState<PersonFilter>("all");
   const [error, setError] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysisMode, setAnalysisMode] = useState<AnalysisMode>("local");
   const [aiSettings, setAiSettings] = useState<AiSettings>(() => loadAiSettings());
 
   const visiblePeople = useMemo(() => {
@@ -105,18 +102,16 @@ function App() {
     setError("");
     if (article.text.trim().length < 40) {
       setError("请先粘贴一段完整文章正文，至少 40 个字符。");
-      setResult(null);
       return;
     }
-    if (analysisMode === "ai" && !aiSettings.apiKey.trim()) {
-      setError("AI 结构化模式需要填写 OpenAI API Key。Key 只保存在当前浏览器。");
+    if (!aiSettings.apiKey.trim()) {
+      setError("AI 分析需要填写服务商 API Key。Key 只保存在当前浏览器。");
       return;
     }
 
     setIsAnalyzing(true);
     try {
-      const analyzed =
-        analysisMode === "ai" ? await analyzeArticleWithOpenAI(article, aiSettings) : analyzeArticle(article);
+      const analyzed = await analyzeArticleWithOpenAI(article, aiSettings);
       analyzed.people.forEach((person) => {
         recordEncounter(person, analyzed.article);
       });
@@ -161,15 +156,15 @@ function App() {
     <main className="app-shell">
       <section className="hero-band">
         <div>
-          <p className="eyebrow">PeopleLens Web MVP</p>
+          <p className="eyebrow">PeopleLens Web Support</p>
           <h1>阅读文章时生成“本文人物”</h1>
           <p className="hero-copy">
-            粘贴文章正文，PeopleLens 会用本地规则抽取人物、证据句和关系摘要，并把你见过的人记在浏览器本地。
+            粘贴文章正文，PeopleLens 会用 AI 生成文章人物、证据句和关系摘要，并把你见过的人记在浏览器本地。
           </p>
         </div>
         <div className="privacy-note">
-          <strong>双模式</strong>
-          <span>本地规则不上传正文；AI 结构化模式会把文章句子发送给 OpenAI，并使用浏览器中保存的 API Key。</span>
+          <strong>AI 分析</strong>
+          <span>标题、来源和分句后的正文会发送给你配置的 AI 服务商；API Key 只保存在当前浏览器。</span>
         </div>
       </section>
 
@@ -177,7 +172,6 @@ function App() {
         <ArticleInputForm
           article={article}
           aiSettings={aiSettings}
-          analysisMode={analysisMode}
           error={error}
           isAnalyzing={isAnalyzing}
           onAnalyze={handleAnalyze}
@@ -185,7 +179,6 @@ function App() {
             setAiSettings(settings);
             saveAiSettings(settings);
           }}
-          onAnalysisModeChange={setAnalysisMode}
           onChange={setArticle}
         />
         <CastSidebar

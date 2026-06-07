@@ -80,8 +80,6 @@ export interface CandidateGroup {
   mentions: CandidateMention[];
 }
 
-export type AnalysisMode = "local" | "ai";
-
 export type AiProtocol = "chat_completions" | "responses";
 
 export interface AiSettings {

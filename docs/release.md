@@ -4,7 +4,9 @@
 
 Current target: MVP/Beta.
 
-This release is suitable for Web MVP deployment and Chrome Extension internal testing. Chrome Web Store production submission still requires final screenshots, developer account review, and a public support URL.
+This release is suitable for Chrome Extension internal testing and store-preparation review. The Web app is not a public launch target in this phase; `dist/` is kept as a build-validated support asset surface.
+
+Chrome Web Store production submission still requires final screenshots, developer account review, a public support URL, and a public privacy policy URL.
 
 ## Prerequisites
 
@@ -27,15 +29,17 @@ npm run release:package
 
 Outputs:
 
-- Web static site: `dist/`
+- Web support assets: `dist/`
 - Chrome Extension unpacked build: `extension-dist/`
 - Chrome Extension zip: `.release/peoplelens-extension-0.1.0.zip`
 
 ## Web Deployment
 
-Deploy `dist/` to a static host such as Vercel, Netlify, Cloudflare Pages, GitHub Pages, or an object storage CDN.
+Do not deploy the Web app as the product launch target for this phase.
 
-Required static files included in `dist/`:
+If a public privacy policy URL is needed for Chrome Web Store review, deploy only the support pages or host equivalent policy text through an approved support channel.
+
+Support files included in `dist/`:
 
 - `privacy.html`
 - `terms.html`
@@ -58,14 +62,16 @@ Store submission:
 2. Upload `.release/peoplelens-extension-0.1.0.zip`.
 3. Use draft copy from `docs/chrome-web-store-listing.md`.
 4. Attach screenshots.
-5. Provide public privacy policy URL from the deployed Web app.
+5. Provide a public privacy policy URL. The Web product itself does not need to be launched.
 
 ## Release Gate
 
 Do not release if any of these fail:
 
 - `npm run openspec:validate`
-- `npm run fixtures:analyze`
 - `npm run build`
 - `npm run typecheck:extension`
 - `npm run build:extension`
+- `npm run release:check`
+
+`npm run fixtures:analyze` remains available as a local heuristic regression tool, but it is not a release gate while local heuristic analysis is not user-facing.

@@ -6,9 +6,10 @@ PeopleLens is a local-first reading assistant that turns people-heavy articles i
 
 ## Current Product Stage
 
-- Web MVP built with Vite, React, and TypeScript.
-- Users paste article text and optionally provide title and source URL.
-- Analysis supports local heuristic extraction and AI structured extraction.
+- Web MVP built with Vite, React, and TypeScript, currently kept as a local development and support surface.
+- Chrome Extension MVP is the current launch target.
+- Users can analyze active pages in the extension or paste article text manually.
+- User-facing analysis is AI structured extraction only.
 - Local memory currently uses browser `localStorage`.
 - A fixture article workflow exists under `fixtures/` for quality baselines.
 
@@ -16,7 +17,7 @@ PeopleLens is a local-first reading assistant that turns people-heavy articles i
 
 - `npm run dev` starts the Vite development server.
 - `npm run build` runs TypeScript and production build checks.
-- `npm run fixtures:analyze` runs local analysis against ready fixture articles.
+- `npm run fixtures:analyze` runs local heuristic analysis against ready fixture articles as a non-release regression tool.
 - `npm run openspec:list` lists active OpenSpec changes.
 - `npm run openspec:validate -- <change-or-spec>` validates OpenSpec artifacts.
 
@@ -34,13 +35,13 @@ PeopleLens is a local-first reading assistant that turns people-heavy articles i
 - Use OpenSpec for feature-sized changes, behavior changes, architectural shifts, and changes that alter user-facing requirements.
 - Small mechanical fixes may be implemented directly when the intended behavior is already clear.
 - For OpenSpec changes, create a proposal before implementation, keep tasks verifiable, then archive the change after implementation and validation.
-- Prefer adding or updating fixture expectations when extraction quality changes.
-- Run `npm run fixtures:analyze` and `npm run build` before considering a change complete.
+- Prefer adding or updating fixture expectations when local heuristic extraction is intentionally changed.
+- Run `npm run build`, `npm run typecheck:extension`, and `npm run build:extension` before considering a user-facing change complete.
 
 ## Product Constraints
 
-- Preserve the privacy posture: local mode must not upload article text.
-- AI mode must remain explicit and user-triggered.
+- Preserve the privacy posture: analysis must remain explicit and user-triggered.
+- AI analysis sends title, source, and sentence list to the configured provider only after user action.
 - Avoid background page scanning in the MVP.
 - Person cards should prioritize article-grounded identity, role, evidence, and uncertainty over broad biography.
 - Relationship summaries should be evidence-backed and conservative.

@@ -18,26 +18,17 @@ The system SHALL analyze article text only after the user explicitly requests an
 - **WHEN** the user starts analysis
 - **THEN** the system refuses analysis and shows a user-facing error
 
-### Requirement: Local heuristic mode
-
-The system SHALL provide a local analysis mode that does not upload article text.
-
-#### Scenario: Run local analysis
-- **GIVEN** the user selects local analysis mode
-- **WHEN** the user starts analysis
-- **THEN** the system extracts candidate people, evidence sentences, and relationships in the browser
-
 ### Requirement: AI structured mode
 
-The system SHALL provide an explicit AI structured mode that requires user-provided provider settings and validates structured payloads before rendering.
+The system SHALL provide AI structured analysis as the only user-facing analysis path, requiring user-provided provider settings and validating structured payloads before rendering.
 
 #### Scenario: Missing API key
-- **GIVEN** the user selects AI structured mode without an API key
+- **GIVEN** the user has not provided an API key
 - **WHEN** the user starts analysis
 - **THEN** the system refuses analysis and explains that an API key is required
 
 #### Scenario: Run AI analysis
-- **GIVEN** the user selects AI structured mode with provider settings
+- **GIVEN** the user has provided provider settings
 - **WHEN** the user starts analysis
 - **THEN** the system sends the title, source, and sentence list to the configured provider
 

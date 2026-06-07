@@ -15,5 +15,5 @@ await execFileAsync("zip", ["-r", extensionZip, "."], {
   cwd: resolve("extension-dist"),
 });
 
-console.log(`Web release directory: ${resolve("dist")}`);
+console.log(`Web support assets directory: ${resolve("dist")}`);
 console.log(`Extension release package: ${extensionZip}`);

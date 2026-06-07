@@ -2,19 +2,17 @@
 
 ## Scope
 
-This launch target is the Web MVP plus Chrome Extension MVP for external trial users.
+This launch target is the AI-only Chrome Extension MVP for external trial users. The Web app is not part of this public launch phase.
 
 ## Included
 
-- Paste-based Web MVP.
-- Local heuristic analysis.
+- Chrome Extension side panel with active-page extraction and manual paste fallback.
 - AI structured analysis with runtime payload validation.
 - Person cards with evidence and confidence.
 - Relationship summaries.
 - Local memory with save, search, clear, and JSON export.
 - Markdown export for the current analysis.
-- Fixture quality baseline.
-- Chrome Extension side panel with active-page extraction and manual paste fallback.
+- Web app build kept as a local development and support-asset surface.
 
 ## Not Included
 
@@ -24,6 +22,8 @@ This launch target is the Web MVP plus Chrome Extension MVP for external trial u
 - Background page scanning.
 - Page text highlighting or hover cards.
 - Complex graph visualization.
+- Public Web app launch.
+- Local heuristic analysis as a user-facing mode.
 
 ## Required Checks
 
@@ -37,14 +37,14 @@ npm run release:package
 Expected checks:
 
 - OpenSpec validation passes.
-- Fixture analysis passes.
-- Web build passes.
-- Extension build passes.
+- Web build passes as a support-surface check.
+- Extension typecheck and build pass.
+- Release asset inspection passes.
 - Extension zip package is created under `.release/`.
 
-## Static Release Pages
+## Static Support Pages
 
-Confirm deployed URLs work:
+Confirm built support assets exist. Deploy only if a public privacy/support URL is needed for extension review:
 
 - `/privacy.html`
 - `/terms.html`
@@ -52,16 +52,17 @@ Confirm deployed URLs work:
 - `/site.webmanifest`
 - `/favicon.svg`
 
-## Manual Web Smoke Test
+## Optional Web Dev Smoke Test
 
 1. Run `npm run dev`.
 2. Paste a real article.
-3. Run local analysis.
-4. Save a person.
-5. Confirm the person appears in local memory.
-6. Export Markdown.
-7. Export local memory JSON.
-8. Clear memory and confirm the memory panel resets.
+3. Configure AI provider settings.
+4. Run AI analysis.
+5. Save a person.
+6. Confirm the person appears in local memory.
+7. Export Markdown.
+8. Export local memory JSON.
+9. Clear memory and confirm the memory panel resets.
 
 ## Manual Extension Smoke Test
 
@@ -69,12 +70,16 @@ Confirm deployed URLs work:
 2. Load `extension-dist/` through Chrome Extensions Developer Mode.
 3. Open an article page.
 4. Open PeopleLens side panel.
-5. Click analyze current page.
-6. Confirm fallback paste works on pages where extraction is blocked or too short.
+5. Configure an AI provider API Key.
+6. Click analyze current page.
+7. Confirm the clicked button shows in-progress feedback and existing results remain visible during a retry.
+8. Confirm person cards, relationships, local memory, save toggle, and Markdown export work.
+9. Confirm fallback paste works on pages where extraction is blocked or too short.
+10. Clear the API Key and confirm analysis is refused before reading the active page.
 
 ## Chrome Web Store Preparation
 
 - Prepare screenshots listed in `docs/chrome-web-store-listing.md`.
 - Confirm extension icon renders at 16, 32, 48, and 128 pixels.
-- Use the deployed `/privacy.html` URL for privacy policy.
+- Provide a public privacy policy URL; Web product launch is not required.
 - Confirm permission rationale matches `extension/manifest.json`.

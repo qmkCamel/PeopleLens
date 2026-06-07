@@ -14,9 +14,9 @@
     "openspec:list:specs": "openspec list --specs",
     "openspec:validate": "openspec validate --all",
     "release:check": "node scripts/check-release-assets.mjs",
-    "release:package": "npm run validate && npm run release:check && node scripts/package-release.mjs",
+    "release:package": "npm run validate && node scripts/package-release.mjs",
     "typecheck:extension": "tsc --noEmit -p tsconfig.extension.json",
-    "validate": "npm run openspec:validate && npm run fixtures:analyze && npm run build && npm run typecheck:extension && npm run build:extension && npm run release:check",
+    "validate": "npm run openspec:validate && npm run build && npm run typecheck:extension && npm run build:extension && npm run release:check",
     "preview": "vite preview"
   },
   "dependencies": {

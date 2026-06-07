@@ -1,22 +1,4 @@
-# extension-mvp Specification
-
-## Purpose
-
-Provide a Chrome Extension side panel that analyzes the active page only after user action and keeps page access narrowly scoped.
-## Requirements
-### Requirement: Side panel shell
-
-The Chrome Extension MVP SHALL provide a Manifest V3 side panel launched by the extension action and include release icon assets.
-
-#### Scenario: Open side panel
-- **GIVEN** the extension is installed
-- **WHEN** the user clicks the extension action
-- **THEN** Chrome opens the PeopleLens side panel
-
-#### Scenario: Manifest icons
-- **GIVEN** the extension package is built
-- **WHEN** the manifest is inspected
-- **THEN** it references packaged icons for 16, 32, 48, and 128 pixel sizes
+## MODIFIED Requirements
 
 ### Requirement: User-triggered page extraction
 
@@ -45,12 +27,3 @@ The extension SHALL provide manual paste fallback when active-page extraction is
 - **GIVEN** the user has pasted at least the minimum useful article length and configured AI provider settings
 - **WHEN** the user requests pasted-text analysis
 - **THEN** the extension analyzes the pasted article with the configured AI provider
-
-### Requirement: Minimal permissions
-
-The extension SHALL avoid broad host permissions in the MVP.
-
-#### Scenario: Inspect manifest permissions
-- **GIVEN** the extension manifest is built
-- **WHEN** permissions are reviewed
-- **THEN** the manifest uses `activeTab`, `scripting`, `storage`, and `sidePanel`, and limits host permissions to supported AI provider API origins without broad page-reading host permissions

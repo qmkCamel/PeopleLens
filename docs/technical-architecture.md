@@ -2,11 +2,11 @@
 
 ## 1. 工程目标
 
-先把 PeopleLens 做成一个本地优先的 Web MVP，再以尽量少的重写成本包装成 Chrome Extension。
+先把 PeopleLens 做成一个 AI-only Chrome Extension MVP，Web 保留为本地开发、手动粘贴调试和支持页面资产。
 
 第一版需要证明：
 
-- 文章正文可以被转化为结构化人物演员表。
+- 真实页面正文可以被转化为结构化人物演员表。
 - 人物卡片和关系摘要能真实改善阅读体验。
 - 本地记忆可以识别之前见过或保存过的人物。
 
@@ -17,8 +17,8 @@
 ```text
 peoplelens/
   apps/
-    web/                  # Web MVP
-    extension/            # Chrome Extension 外壳
+    web/                  # Web 支持面
+    extension/            # Chrome Extension 主入口
   packages/
     core/                 # 抽取、排序、记忆、共享类型
     ui/                   # 可复用 UI 组件
@@ -42,14 +42,13 @@ PeopleLens/
 
 ## 3. MVP 技术栈
 
-### Web MVP
+### Web 支持面
 
 - Vite。
 - TypeScript。
 - React。
-- IndexedDB，通过 Dexie 管理本地记忆。
+- `localStorage` 管理 MVP 本地记忆和 AI 设置。
 - 普通 CSS 或 CSS Modules。
-- 可选：Zod，用于校验 AI 结构化输出。
 
 ### Chrome Extension MVP
 
@@ -61,28 +60,24 @@ PeopleLens/
 
 ### AI / NLP
 
-MVP 支持两种模式：
+MVP 用户可见分析支持一种模式：
 
-1. 本地启发式模式
-   - 不需要 API Key。
-   - 抽取可能的人名和证据句。
-   - 适合 Demo、离线验证和隐私敏感场景。
-
-2. AI 结构化模式
+1. AI 结构化模式
    - 使用用户自己的 API Key，或后续通过服务端代理。
    - 生成更高质量的人物角色、关系摘要和不确定性说明。
    - 渲染前必须校验结构化响应。
+   - 只在用户主动点击分析后发送标题、来源和分句正文。
+
+本地启发式代码可以作为内部实验和 fixture 回归工具保留，但不作为用户可见产品模式。
 
 ## 4. 高层数据流
 
 ```text
 文章正文
   -> 清洗和分句
-  -> 抽取候选人物
-  -> 合并别名和重复提及
-  -> 计算人物重要性
-  -> 生成文章内人物卡片
-  -> 推断人物关系
+  -> AI 结构化分析
+  -> 校验结构化响应
+  -> 映射为文章内人物卡片和关系
   -> 和本地记忆比对
   -> 渲染人物演员表并保存遇见记录
 ```
@@ -93,7 +88,8 @@ Chrome Extension 数据流：
 用户点击插件
   -> 打开侧边栏
   -> Content Script 抽取当前页面正文
-  -> 侧边栏把正文交给共享分析核心
+  -> 侧边栏把标题、来源和正文发送给配置的 AI Provider
+  -> 校验结构化响应
   -> 分析结果保存到本地
   -> UI 渲染人物卡片和关系摘要
 ```
@@ -171,24 +167,18 @@ MVP 不做后台页面扫描。
 
 中英混合文章同时使用两套策略。
 
-### 步骤 3：候选人物抽取
+### 步骤 3：AI 结构化人物抽取
 
-MVP 启发式抽取：
+MVP 用户可见结果由 AI 结构化输出生成：
 
-- 英文名：连续 2-4 个首字母大写词。
-- 中文名：2-4 个汉字，且靠近角色词、职位词，或在文章中重复出现。
-- 排除常见组织、地点、产品名和全大写股票代码。
-
-有用的上下文信号：
-
-- 英文头衔：CEO、founder、president、minister、professor、investor、analyst。
-- 中文头衔：创始人、CEO、总裁、董事长、教授、总理、总统、投资人。
-- 同位语结构：`X, the CEO of Y`。
-- 关系动词：founded、joined、replaced、criticized、backed、sued、met。
+- 输入包含文章标题、来源 URL 和带 ID 的句子列表。
+- 输出必须是 JSON，包含 people、relationships 和 uncertaintyNotes。
+- 每个人物必须引用至少一个证据句 ID。
+- 渲染前必须校验结构。
 
 ### 步骤 4：别名合并
 
-规则：
+规则由 AI 输出和本地归一化共同处理：
 
 - 当上下文无歧义时，把英文全名和只出现姓氏的提及合并。
 - 中文姓名以完整姓名精确匹配为主。
@@ -197,19 +187,7 @@ MVP 启发式抽取：
 
 ### 步骤 5：重要性排序
 
-重要性分数：
-
-```text
-score =
-  mentionCount * 2
-  + appearsInTitle * 6
-  + earlyMention * 3
-  + hasRoleNearby * 4
-  + relationshipMentions * 3
-  + savedBefore * 2
-```
-
-分数只用于排序，不直接展示给用户，除非在调试模式中查看。
+AI 输出顺序作为基础排序，本地用提及次数、证据数量和保存状态辅助展示。
 
 ### 步骤 6：人物卡片生成
 
@@ -408,10 +386,10 @@ MVP 不强制外部资料增强。
 ### 本地统一接口
 
 ```ts
-analyzeArticle(input: ArticleInput): Promise<AnalysisResult>
+analyzeArticleWithOpenAI(input: ArticleInput, settings: AiSettings): Promise<AnalysisResult>
 ```
 
-UI 始终调用同一个稳定接口，不关心底层是规则抽取还是 AI。
+用户可见 UI 调用 AI 结构化分析接口。本地启发式接口只用于内部实验或 fixture 回归。
 
 ### Provider 抽象
 
@@ -423,11 +401,10 @@ interface AnalysisProvider {
 
 Provider 类型：
 
-- `HeuristicProvider`
 - `OpenAIProvider`
 - 未来可加：`ServerProvider`
 
-这样 Web MVP 可以无 API Key 运行，后续也能接入更好的 AI 分析。
+这样 MVP 可以先用用户配置的服务商运行，后续再切换为服务端代理或临时令牌。
 
 ## 12. 第一版项目结构
 
@@ -462,29 +439,21 @@ PeopleLens/
 
 ## 13. 工程里程碑
 
-### 里程碑 1：静态 Web MVP
+### 里程碑 1：AI-only Extension MVP
 
-- Vite React 应用。
-- 粘贴文章。
-- 启发式人物抽取。
+- Manifest V3 Side Panel。
+- 用户点击后抽取当前页面正文。
+- AI 结构化人物抽取。
 - 人物卡片。
 - 关系列表。
 - 本地保存/收藏。
 - Markdown 导出。
 
-### 里程碑 2：AI 分析模式
+### 里程碑 2：Web 支持面
 
-- 增加 Provider 抽象。
-- 增加结构化 AI 输出。
-- 用 schema 校验 JSON。
-- 增加置信度和来源标签。
-
-### 里程碑 3：Chrome Extension 外壳
-
-- Manifest V3。
-- Side Panel 应用。
-- 用户点击后抽取当前页面正文。
-- 复用分析和 UI 模块。
+- 粘贴文章调试入口。
+- AI 设置验证。
+- 支持页和政策页资产。
 
 ### 里程碑 4：记忆层
 
@@ -527,6 +496,8 @@ PeopleLens/
 - Top 人物。
 - 应排除的误判。
 - 关键人物关系。
+
+当前 fixture 脚本绑定本地启发式逻辑，因此只作为内部回归工具，不作为 AI-only 扩展发布门禁。
 
 ### UI 测试
 
@@ -575,9 +546,9 @@ PeopleLens/
 
 缓解方式：
 
-- 先做粘贴式 Web MVP。
-- 产品价值成立后再做 Extension 正文抽取。
-- Extension 中保留手动粘贴兜底。
+- Extension 正文抽取只在用户点击后运行。
+- 保留手动粘贴兜底。
+- 对低信号页面显示可恢复错误，不覆盖已有结果。
 
 ### 隐私顾虑
 

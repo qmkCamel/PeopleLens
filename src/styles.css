@@ -171,21 +171,16 @@ h3 {
   background: #f8faf7;
 }
 
-.mode-options {
+.mode-header {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
+  gap: 4px;
+  color: #17211b;
 }
 
-.mode-options button {
-  min-height: 38px;
-  font-weight: 750;
-}
-
-.mode-options button[aria-checked="true"] {
-  border-color: #22472c;
-  background: #e6efe5;
-  color: #22472c;
+.mode-header span {
+  color: #5a675d;
+  font-size: 0.88rem;
+  line-height: 1.5;
 }
 
 .ai-settings {
@@ -197,8 +192,7 @@ h3 {
   padding: 0;
 }
 
-.ai-settings p,
-.local-mode-note {
+.ai-settings p {
   margin: 0;
   color: #5a675d;
   font-size: 0.88rem;

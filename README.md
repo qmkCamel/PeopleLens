@@ -1,15 +1,14 @@
 # PeopleLens
 阅读文章时自动生成“人物演员表”，帮你看懂谁是谁、谁和谁有关、为什么重要，并记住下次再遇到他们。
 
-## Web MVP
+## Chrome Extension MVP
 
-当前阶段是双模式 Web MVP：粘贴文章正文后，PeopleLens 可以用本地规则或 AI 结构化模式抽取人物、生成证据卡片、整理人物关系，并用 `localStorage` 记录已见过和已保存的人物。
+当前阶段是 AI-only、Extension-first MVP：PeopleLens 先以 Chrome 侧边栏作为主要测试入口，Web 应用仅保留为本地开发、配置验证和支持页面资产，不作为本阶段公开上线目标。
 
-- 本地规则：不上传正文，不需要 API Key，但中文识别较粗。
-- AI 结构化：支持 Chat Completions 和 Responses API 两种协议，会把标题、来源和分句后的正文发送给所选服务商，人物卡片质量更高。
+- AI 结构化：支持 Chat Completions 和 Responses API 两种协议，会把标题、来源和分句后的正文发送给所选服务商。
 - DeepSeek 测试默认值：协议选择 Chat Completions，Base URL 填 `https://api.deepseek.com`，模型填 `deepseek-v4-flash`。
 - 本地记忆：支持搜索、保存、清空和 JSON 导出。
-- Chrome Extension MVP：支持右侧侧边栏、用户点击后分析当前页面、手动粘贴兜底。
+- Chrome Extension MVP：支持右侧侧边栏、用户点击后读取当前页面、AI 分析当前页面、手动粘贴兜底。
 
 ### 本地启动
 
@@ -31,7 +30,7 @@ npm run validate
 npm run release:package
 ```
 
-`validate` 会依次运行 OpenSpec 校验、fixture 基线、本地 Web 构建和 Chrome Extension 构建。`release:package` 会生成 Web 静态构建和 Chrome Extension zip。
+`validate` 会依次运行 OpenSpec 校验、Web 构建、Chrome Extension 类型检查、Chrome Extension 构建和发布资产检查。`release:package` 会生成 Chrome Extension zip；`dist/` 只作为支持页面和未来 Web 发布资产。
 
 ### Chrome Extension MVP
 
@@ -47,7 +46,7 @@ npm run build:extension
 2. 点击 Load unpacked。
 3. 选择 `extension-dist/`。
 
-扩展使用 Manifest V3，权限限定为 `activeTab`、`scripting`、`sidePanel` 和 `storage`。它只在用户点击侧边栏按钮时读取当前页面，不做后台扫描。
+扩展使用 Manifest V3，页面权限限定为 `activeTab`、`scripting`、`sidePanel` 和 `storage`。AI 请求需要声明 `https://api.deepseek.com/*` 和 `https://api.openai.com/*` host permissions。扩展只在用户点击侧边栏按钮时读取当前页面，不做后台扫描。
 
 ### 微信文章测试
 
@@ -57,7 +56,7 @@ https://mp.weixin.qq.com/s/yPhd9bjl5UHFf58sgZLlaA
 
 然后手动复制正文，粘贴到 PeopleLens 的正文输入区，点击“分析本文人物”。
 
-如果本地规则效果较差，可以切换到“AI 结构化”模式，填写 API Key 后再分析。API Key 只保存在当前浏览器本地；正式产品应改为服务端代理或临时令牌。若浏览器直接请求某些服务商时遇到 CORS 限制，需要增加本地代理或后端代理。
+AI 分析需要填写 API Key。API Key 只保存在当前浏览器或扩展本地；正式产品应改为服务端代理或临时令牌。Chrome Extension 当前支持 DeepSeek 和 OpenAI 官方 API 域名，其他兼容服务商需要更新 manifest host permissions 后重新打包。
 
 ## 文档
 

@@ -275,7 +275,7 @@ function parseAiPayload(outputText: string): AiResponsePayload {
   try {
     parsed = JSON.parse(outputText);
   } catch {
-    throw new Error("AI 返回的内容不是合法 JSON，请重试或切换为本地规则模式。");
+    throw new Error("AI 返回的内容不是合法 JSON，请重试或调整模型/协议设置。");
   }
   const error = validateAiPayload(parsed);
   if (error) {
