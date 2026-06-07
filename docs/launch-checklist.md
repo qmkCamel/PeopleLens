@@ -31,6 +31,7 @@ Run before release:
 
 ```bash
 npm run validate
+npm run e2e:extension
 npm run release:package
 ```
 
@@ -40,6 +41,7 @@ Expected checks:
 - Web build passes as a support-surface check.
 - Extension typecheck and build pass.
 - Release asset inspection passes.
+- Lightpanda extension E2E passes.
 - Extension zip package is created under `.release/`.
 
 ## Static Support Pages
@@ -66,16 +68,17 @@ Confirm built support assets exist. Deploy only if a public privacy/support URL 
 
 ## Manual Extension Smoke Test
 
-1. Run `npm run build:extension`.
-2. Load `extension-dist/` through Chrome Extensions Developer Mode.
-3. Open an article page.
-4. Open PeopleLens side panel.
-5. Configure an AI provider API Key.
-6. Click analyze current page.
-7. Confirm the clicked button shows in-progress feedback and existing results remain visible during a retry.
-8. Confirm person cards, relationships, local memory, save toggle, and Markdown export work.
-9. Confirm fallback paste works on pages where extraction is blocked or too short.
-10. Clear the API Key and confirm analysis is refused before reading the active page.
+1. Run `npm run e2e:extension`.
+2. Run `npm run build:extension`.
+3. Load `extension-dist/` through Chrome Extensions Developer Mode.
+4. Open an article page.
+5. Open PeopleLens side panel.
+6. Configure an AI provider API Key.
+7. Click analyze current page.
+8. Confirm the clicked button shows in-progress feedback and existing results remain visible during a retry.
+9. Confirm person cards, relationships, local memory, save toggle, and Markdown export work.
+10. Confirm fallback paste works on pages where extraction is blocked or too short.
+11. Clear the API Key and confirm analysis is refused before reading the active page.
 
 ## Chrome Web Store Preparation
 

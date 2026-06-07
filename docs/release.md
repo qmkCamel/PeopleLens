@@ -19,6 +19,7 @@ Chrome Web Store production submission still requires final screenshots, develop
 ```bash
 npm ci
 npm run validate
+npm run e2e:extension
 ```
 
 ## Package Release
@@ -73,5 +74,6 @@ Do not release if any of these fail:
 - `npm run typecheck:extension`
 - `npm run build:extension`
 - `npm run release:check`
+- `npm run e2e:extension`
 
 `npm run fixtures:analyze` remains available as a local heuristic regression tool, but it is not a release gate while local heuristic analysis is not user-facing.

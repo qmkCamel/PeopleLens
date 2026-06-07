@@ -27,10 +27,11 @@ npm run build
 
 ```bash
 npm run validate
+npm run e2e:extension
 npm run release:package
 ```
 
-`validate` 会依次运行 OpenSpec 校验、Web 构建、Chrome Extension 类型检查、Chrome Extension 构建和发布资产检查。`release:package` 会生成 Chrome Extension zip；`dist/` 只作为支持页面和未来 Web 发布资产。
+`validate` 会依次运行 OpenSpec 校验、Web 构建、Chrome Extension 类型检查、Chrome Extension 构建和发布资产检查。`e2e:extension` 会用 Lightpanda + Puppeteer Core 运行独立扩展侧栏 E2E；`release:package` 会生成 Chrome Extension zip；`dist/` 只作为支持页面和未来 Web 发布资产。
 
 ### Chrome Extension MVP
 
@@ -47,6 +48,16 @@ npm run build:extension
 3. 选择 `extension-dist/`。
 
 扩展使用 Manifest V3，页面权限限定为 `activeTab`、`scripting`、`sidePanel` 和 `storage`。AI 请求需要声明 `https://api.deepseek.com/*` 和 `https://api.openai.com/*` host permissions。扩展只在用户点击侧边栏按钮时读取当前页面，不做后台扫描。
+
+### 独立 E2E
+
+```bash
+npm run e2e:extension
+```
+
+E2E 会先构建 `extension-dist/`，再启动本地测试 harness 和 Lightpanda CDP server，通过 mock `chrome.tabs`、`chrome.scripting` 和 AI `fetch` 验证侧栏完整流程：缺少 API Key 拒绝、用户触发当前页抽取、AI 分析忙状态、结果渲染、保存人物、失败保留旧结果、短正文兜底。脚本优先使用 `LIGHTPANDA_BINARY` 或 PATH 上的 `lightpanda`；没有时会下载 nightly binary 到 `.tmp/lightpanda/`，并在运行时禁用 Lightpanda telemetry。
+
+Lightpanda 不是 Chrome，不能验证扩展安装、`chrome://extensions`、真实 side panel 打开或 Chrome Web Store 权限弹窗；这些仍需要按上线清单做手动 Chrome smoke test。
 
 ### 微信文章测试
 

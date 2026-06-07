@@ -8,6 +8,7 @@
     "assets:generate": "node scripts/generate-extension-icons.mjs",
     "build": "tsc -b && vite build",
     "build:extension": "node scripts/build-extension.mjs",
+    "e2e:extension": "npm run build:extension && node tests/e2e/extension-sidepanel-lightpanda.mjs",
     "fixtures:analyze": "node scripts/analyze-fixtures.mjs",
     "openspec": "openspec",
     "openspec:list": "openspec list",
@@ -29,6 +30,7 @@
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react": "^5.0.4",
     "esbuild": "^0.27.7",
+    "puppeteer-core": "^24.43.1",
     "typescript": "^5.9.3",
     "vite": "^7.1.12"
   }
