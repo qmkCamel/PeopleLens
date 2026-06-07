@@ -18,6 +18,7 @@ import {
 } from "./memory/memoryService";
 import { ArticleInputForm } from "./ui/ArticleInput";
 import { CastSidebar, type PersonFilter } from "./ui/CastSidebar";
+import { LogoMark } from "./ui/LogoMark";
 import { MemoryLibrary } from "./ui/MemoryLibrary";
 import { RelationshipList } from "./ui/RelationshipList";
 
@@ -156,7 +157,13 @@ function App() {
     <main className="app-shell">
       <section className="hero-band">
         <div>
-          <p className="eyebrow">PeopleLens Web Support</p>
+          <div className="brand-lockup" aria-label="PeopleLens">
+            <LogoMark className="brand-mark" />
+            <div className="brand-copy">
+              <strong>PeopleLens</strong>
+              <span>Web Support</span>
+            </div>
+          </div>
           <h1>阅读文章时生成“本文人物”</h1>
           <p className="hero-copy">
             粘贴文章正文，PeopleLens 会用 AI 生成文章人物、证据句和关系摘要，并把你见过的人记在浏览器本地。

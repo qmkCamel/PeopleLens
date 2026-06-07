@@ -6,9 +6,13 @@ const iconSizes = [16, 32, 48, 128];
 const outdir = resolve("extension/icons");
 
 const colors = {
-  background: [34, 71, 44, 255],
-  foreground: [244, 246, 242, 255],
-  accent: [220, 232, 221, 255],
+  transparent: [0, 0, 0, 0],
+  background: [139, 149, 136, 255],
+  foreground: [244, 239, 230, 255],
+  sageShadow: [111, 123, 113, 255],
+  clay: [195, 163, 146, 255],
+  linen: [227, 208, 191, 255],
+  mauve: [183, 166, 162, 255],
 };
 
 const crcTable = new Uint32Array(256).map((_, index) => {
@@ -32,16 +36,25 @@ function createIconPng(size) {
   const pixels = new Uint8Array(size * size * 4);
   for (let y = 0; y < size; y += 1) {
     for (let x = 0; x < size; x += 1) {
-      setPixel(pixels, size, x, y, colors.background);
+      setPixel(pixels, size, x, y, colors.transparent);
     }
   }
 
-  const center = size * 0.43;
-  const radius = size * 0.23;
-  const stroke = Math.max(2, size * 0.08);
-  drawCircleStroke(pixels, size, center, center, radius, stroke, colors.foreground);
-  drawLine(pixels, size, size * 0.6, size * 0.6, size * 0.82, size * 0.82, Math.max(2, size * 0.09), colors.foreground);
-  drawFilledCircle(pixels, size, center, center, Math.max(2, size * 0.08), colors.accent);
+  drawRoundedRect(pixels, size, size * 0.06, size * 0.06, size * 0.88, size * 0.88, size * 0.23, colors.background);
+
+  const centerX = size * 0.44;
+  const centerY = size * 0.42;
+  const radius = size * 0.24;
+  const stroke = Math.max(2, size * 0.075);
+  drawLine(pixels, size, size * 0.6, size * 0.59, size * 0.79, size * 0.78, Math.max(2, size * 0.09), colors.foreground);
+  drawFilledCircle(pixels, size, centerX, centerY, radius + stroke / 2, colors.background);
+  drawCircleStroke(pixels, size, centerX, centerY, radius * 0.77, Math.max(1, size * 0.016), colors.sageShadow);
+  drawCircleStroke(pixels, size, centerX, centerY, radius, stroke, colors.foreground);
+  drawLine(pixels, size, size * 0.38, size * 0.4, size * 0.5, size * 0.35, Math.max(1, size * 0.032), colors.foreground);
+  drawLine(pixels, size, size * 0.5, size * 0.35, size * 0.55, size * 0.49, Math.max(1, size * 0.032), colors.foreground);
+  drawFilledCircle(pixels, size, size * 0.38, size * 0.4, Math.max(1, size * 0.055), colors.clay);
+  drawFilledCircle(pixels, size, size * 0.5, size * 0.35, Math.max(1, size * 0.048), colors.linen);
+  drawFilledCircle(pixels, size, size * 0.55, size * 0.49, Math.max(1, size * 0.055), colors.mauve);
 
   const raw = Buffer.alloc((size * 4 + 1) * size);
   for (let y = 0; y < size; y += 1) {
@@ -56,6 +69,22 @@ function createIconPng(size) {
     chunk("IDAT", deflateSync(raw)),
     chunk("IEND", Buffer.alloc(0)),
   ]);
+}
+
+function drawRoundedRect(pixels, size, x, y, width, height, radius, color) {
+  for (let py = 0; py < size; py += 1) {
+    for (let px = 0; px < size; px += 1) {
+      const dx = Math.max(x - (px + 0.5), 0, px + 0.5 - (x + width));
+      const dy = Math.max(y - (py + 0.5), 0, py + 0.5 - (y + height));
+      const cornerX = px + 0.5 < x + radius ? x + radius : px + 0.5 > x + width - radius ? x + width - radius : px + 0.5;
+      const cornerY = py + 0.5 < y + radius ? y + radius : py + 0.5 > y + height - radius ? y + height - radius : py + 0.5;
+      const inOuterBounds = dx === 0 && dy === 0;
+      const inRoundedCorner = Math.hypot(px + 0.5 - cornerX, py + 0.5 - cornerY) <= radius;
+      if (inOuterBounds && inRoundedCorner) {
+        setPixel(pixels, size, px, py, color);
+      }
+    }
+  }
 }
 
 function drawCircleStroke(pixels, size, cx, cy, radius, stroke, color) {

@@ -4,6 +4,7 @@ import { exportAnalysisAsMarkdown } from "../src/analysis/exportMarkdown";
 import { analyzeArticleWithOpenAI } from "../src/analysis/openaiProvider";
 import type { AiSettings, AnalysisResult, ArticleInput, PersonCard as PersonCardType } from "../src/analysis/types";
 import { getMemoryMap, recordEncounter, toggleSavedPerson } from "../src/memory/memoryService";
+import { LogoMark } from "../src/ui/LogoMark";
 import { PersonCard } from "../src/ui/PersonCard";
 import { RelationshipList } from "../src/ui/RelationshipList";
 import "../src/styles.css";
@@ -156,7 +157,13 @@ function SidePanelApp() {
     <main className="app-shell extension-shell">
       <section className="hero-band extension-hero">
         <div>
-          <p className="eyebrow">PeopleLens Extension</p>
+          <div className="brand-lockup" aria-label="PeopleLens">
+            <LogoMark className="brand-mark" />
+            <div className="brand-copy">
+              <strong>PeopleLens</strong>
+              <span>Extension</span>
+            </div>
+          </div>
           <h1>当前页面人物</h1>
           <p className="hero-copy">点击后读取当前标签页正文，并用你配置的 AI 服务商生成人物卡片；读取失败时可手动粘贴。</p>
         </div>

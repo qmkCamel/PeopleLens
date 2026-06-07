@@ -4,8 +4,8 @@
   "description": "Generate an article-grounded people cast list, relationships, and local reading memory.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f4f6f2",
-  "theme_color": "#22472c",
+  "background_color": "#f4efe6",
+  "theme_color": "#8b9588",
   "icons": [
     {
       "src": "/favicon.svg",
