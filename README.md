@@ -31,7 +31,7 @@ npm run e2e:extension
 npm run release:package
 ```
 
-`validate` 会依次运行 OpenSpec 校验、Web 构建、Chrome Extension 类型检查、Chrome Extension 构建和发布资产检查。`e2e:extension` 会用 Lightpanda + Puppeteer Core 运行独立扩展侧栏 E2E；`release:package` 会生成 Chrome Extension zip；`dist/` 只作为支持页面和未来 Web 发布资产。
+`validate` 会依次运行 OpenSpec 校验、Web 构建、Chrome Extension 类型检查、Chrome Extension 构建和发布资产检查。`e2e:extension` 会运行 Lightpanda 和 Playwright/Chromium 两套扩展侧栏 E2E；`release:package` 会生成 Chrome Extension zip；`dist/` 只作为支持页面和未来 Web 发布资产。
 
 ### Chrome Extension MVP
 
@@ -55,9 +55,12 @@ npm run build:extension
 npm run e2e:extension
 ```
 
-E2E 会先构建 `extension-dist/`，再启动本地测试 harness 和 Lightpanda CDP server，通过 mock `chrome.tabs`、`chrome.scripting` 和 AI `fetch` 验证侧栏完整流程：缺少 API Key 拒绝、用户触发当前页抽取、AI 分析忙状态、结果渲染、保存人物、失败保留旧结果、短正文兜底。脚本优先使用 `LIGHTPANDA_BINARY` 或 PATH 上的 `lightpanda`；没有时会下载 nightly binary 到 `.tmp/lightpanda/`，并在运行时禁用 Lightpanda telemetry。
+E2E 会先构建 `extension-dist/`，然后运行两套浏览器检查：
 
-Lightpanda 不是 Chrome，不能验证扩展安装、`chrome://extensions`、真实 side panel 打开或 Chrome Web Store 权限弹窗；这些仍需要按上线清单做手动 Chrome smoke test。
+- `e2e:extension:lightpanda`：启动本地测试 harness 和 Lightpanda CDP server，通过 mock `chrome.tabs`、`chrome.scripting` 和 AI `fetch` 验证侧栏完整流程：缺少 API Key 拒绝、用户触发当前页抽取、AI 分析忙状态、结果渲染、保存人物、失败保留旧结果、短正文兜底。脚本优先使用 `LIGHTPANDA_BINARY` 或 PATH 上的 `lightpanda`；没有时会下载 nightly binary 到 `.tmp/lightpanda/`，并在运行时禁用 Lightpanda telemetry。
+- `e2e:extension:chromium`：使用 Playwright bundled Chromium + persistent context 加载真实 `extension-dist/`，验证 Manifest V3 service worker、extension page、AI API route mock、粘贴正文分析、导出下载、保存人物、失败保留旧结果；并用 Chromium harness 覆盖当前页抽取路径。
+
+Playwright 官方要求扩展测试使用 bundled Chromium 和 persistent context；首次运行如果缺 Chromium，请先执行 `npx playwright install chromium`。Lightpanda 和 Playwright headless Chromium 都不能完整替代用户在 Chrome 里点击扩展 action 打开真实 side panel、查看 Chrome Web Store 权限弹窗；这些仍需要按上线清单做手动 Chrome smoke test。
 
 ### 微信文章测试
 

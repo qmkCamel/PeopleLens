@@ -18,6 +18,7 @@ Chrome Web Store production submission still requires final screenshots, develop
 
 ```bash
 npm ci
+npx playwright install chromium
 npm run validate
 npm run e2e:extension
 ```
