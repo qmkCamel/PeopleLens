@@ -1,0 +1,105 @@
+[
+  {
+    "rank": 1,
+    "slug": "01-agent-expensive-error",
+    "title": "编程 Agent 可能是软件开发史上最昂贵的错误之一",
+    "url": "https://www.infoq.cn/article/oDaj3oKLwc8MiprLcxhs",
+    "selectionReason": "年度热榜第 1；人物观点强，包含 AI Agent、模型、公司和人物的混合干扰。",
+    "expectedPeople": [
+      "George Hotz",
+      "Andrej Karpathy"
+    ],
+    "actualTitle": "编程 Agent 可能是软件开发史上最昂贵的错误之一",
+    "extractedCharacters": 5699,
+    "extractionEngine": "defuddle",
+    "articleScreenshot": "screenshots/01-agent-expensive-error-article.png",
+    "resultScreenshot": "screenshots/01-agent-expensive-error-peoplelens-result.png",
+    "status": "passed"
+  },
+  {
+    "rank": 3,
+    "slug": "02-opus-benchmark-dispute",
+    "title": "Opus 4.8 刚发布，Redis 之父质疑跑分：DHH 盛赞的 GPT-5.5，正在动摇编码王座",
+    "url": "https://www.infoq.cn/article/rCTXhK96Y3jiDG7N1is5",
+    "selectionReason": "模型发布、跑分争议和开发者人物并存，可检查产品/模型名不会被当成人物。",
+    "expectedPeople": [
+      "antirez",
+      "DHH"
+    ],
+    "actualTitle": "Opus 4.8 刚发布，Redis 之父质疑跑分：DHH 盛赞的 GPT-5.5，正在动摇编码王座",
+    "extractedCharacters": 8144,
+    "extractionEngine": "defuddle",
+    "articleScreenshot": "screenshots/02-opus-benchmark-dispute-article.png",
+    "resultScreenshot": "screenshots/02-opus-benchmark-dispute-peoplelens-result.png",
+    "status": "passed"
+  },
+  {
+    "rank": 4,
+    "slug": "03-deepseek-v4-open-source",
+    "title": "DeepSeek V4 重磅开源！首次打通华为 Ascend，也没丢掉英伟达，百万上下文夺回国产模型话语权",
+    "url": "https://www.infoq.cn/article/wUUPEzvNajcaVN0k7HPF",
+    "selectionReason": "模型、芯片平台和企业名密集，用来验证 PeopleLens 对人物少、组织多文章的表现。",
+    "expectedPeople": [
+      "梁文锋"
+    ],
+    "actualTitle": "DeepSeek V4 重磅开源！首次打通华为Ascend，也没丢掉英伟达，百万上下文夺回国产模型话语权",
+    "extractedCharacters": 11037,
+    "extractionEngine": "defuddle",
+    "articleScreenshot": "screenshots/03-deepseek-v4-open-source-article.png",
+    "resultScreenshot": "screenshots/03-deepseek-v4-open-source-peoplelens-result.png",
+    "status": "passed"
+  },
+  {
+    "rank": 11,
+    "slug": "04-google-ceo-ai-belief",
+    "title": "前 CEO 被学生嘘“别吹 AI”，现 CEO 被追问“会不会被 AI 取代”：谷歌两代掌门人的 AI 信仰，同时被质疑",
+    "url": "https://www.infoq.cn/article/Us2wfr7Wx3sdb1RGoDY6",
+    "selectionReason": "人物密度高，涉及现任/前任 CEO、AI 负责人和 Google 产品体系。",
+    "expectedPeople": [
+      "Sundar Pichai",
+      "Eric Schmidt",
+      "Demis Hassabis"
+    ],
+    "actualTitle": "前 CEO 被学生嘘“别吹AI”，现 CEO 被追问“会不会被AI取代”：谷歌两代掌门人的AI信仰，同时被质疑",
+    "extractedCharacters": 17141,
+    "extractionEngine": "defuddle",
+    "articleScreenshot": "screenshots/04-google-ceo-ai-belief-article.png",
+    "resultScreenshot": "screenshots/04-google-ceo-ai-belief-peoplelens-result.png",
+    "status": "passed"
+  },
+  {
+    "rank": 17,
+    "slug": "05-robot-lwd-interview",
+    "title": "对话罗剑岚：把机器人“部署”本身变成训练的一部分",
+    "url": "https://www.infoq.cn/article/9qNdzFNpb66rcCfKhNFe",
+    "selectionReason": "访谈型文章，核心人物明确，能验证中文姓名、身份和证据句展示。",
+    "expectedPeople": [
+      "罗剑岚",
+      "华卫"
+    ],
+    "actualTitle": "对话罗剑岚：把机器人“部署”本身变成训练的一部分",
+    "extractedCharacters": 3715,
+    "extractionEngine": "defuddle",
+    "articleScreenshot": "screenshots/05-robot-lwd-interview-article.png",
+    "resultScreenshot": "screenshots/05-robot-lwd-interview-peoplelens-result.png",
+    "status": "passed"
+  },
+  {
+    "rank": 18,
+    "slug": "06-github-survival-battle",
+    "title": "GitHub 面临生存之战！多位员工曝内部乱象：独立文化要没了，封杀 Claude Code 才能“活”",
+    "url": "https://www.infoq.cn/article/VZ4KvkToY57zj0ycsdBF",
+    "selectionReason": "公司、竞品和多名高管/员工混合，适合测试人物关系和组织噪声。",
+    "expectedPeople": [
+      "Vlad Fedorov",
+      "Thomas Dohmke",
+      "Satya Nadella"
+    ],
+    "actualTitle": "GitHub面临生存之战！多位员工曝内部乱象：独立文化要没了，封杀Claude Code才能“活”",
+    "extractedCharacters": 4530,
+    "extractionEngine": "defuddle",
+    "articleScreenshot": "screenshots/06-github-survival-battle-article.png",
+    "resultScreenshot": "screenshots/06-github-survival-battle-peoplelens-result.png",
+    "status": "passed"
+  }
+]
